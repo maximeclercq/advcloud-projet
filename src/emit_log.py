@@ -1,3 +1,9 @@
+## Ce programme est utilisé pour simuler
+## l'envoi de données grâce à rabbitMQ en local.
+## Dans le edge, ce script sera remplacé, 
+## soit par une application gérant l'acquisition d'image de caméra..
+
+
 import pika
 import sys
 

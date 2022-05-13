@@ -8,6 +8,9 @@ import random
 import logging
 import json
 
+import socket
+import os.path
+
 from azure.iot.device.aio import IoTHubDeviceClient
 from azure.iot.device.aio import ProvisioningDeviceClient
 from azure.iot.device import Message, MethodResponse
@@ -123,13 +126,31 @@ async def main():
     # TODO : Replace this function by a listener function which retrieve and send data from the IoT device
 
     async def send_telemetry(): 
-        print("Sending data")
+        print("Waiting to send data to the hub")
 
+        if os.path.exists("/tmp/python_unix_sockets_example"):
+            os.remove("/tmp/python_unix_sockets_example")
+
+        print("Opening socket...")
+        server = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+        server.bind("/tmp/python_unix_sockets_example")
+
+        print("Listening...")
         while True:
-            current_data = random.randrange(10, 50)
-            msg1 = {"data": current_data}
-            await send_telemetry_from_device(device_client, msg1)
-            await asyncio.sleep(8)
+            data = server.recv(1024)
+            # data  = struct.unpack("s", data)
+            data = data.decode('utf-8')
+            if not data:
+                break
+            else:
+                print("-" * 20)
+                print(data)
+                await send_telemetry_from_device(device_client, data)
+        print("-" * 20)
+        print("Shutting down...")
+        server.close()
+        os.remove("/tmp/python_unix_sockets_example")
+        print("Done")
 
     send_telemetry_task = asyncio.create_task(send_telemetry())
 

@@ -28,12 +28,8 @@ def send_to_other_process(body):
         client.connect("/tmp/python_unix_sockets_example")
         print("Ready.")
         print("Ctrl-C to quit.")
-        print("Sending 'DONE' shuts down the server and quits.")
         print("SEND:", body)
-        # x = struct.pack("s", x)
-        # x = body.encode("utf-8")
         client.send(body)
-        print("Shutting down.")
         client.close()
     else:
         print("Couldn't Connect!")
