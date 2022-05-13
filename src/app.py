@@ -25,7 +25,6 @@ model_id = "ImageDetector" #TODO : Replace it by a name device parameter
 #####################################################
 # TELEMETRY TASKS
 
-
 async def send_telemetry_from_device(device_client, telemetry_msg):
     msg = Message(json.dumps(telemetry_msg))
     msg.content_encoding = "utf-8"
@@ -133,15 +132,24 @@ async def main():
     print(" [*] Waiting for logs. To exit press CTRL+C")
 
 
-    async def callback(ch, method, properties, body):
-        print("[x] %r" % body)
-        await send_telemetry_from_device(device_client, body)
+    ##############################################################
+    #### Début problème appel asynchrone depuis fonction synchrone
+    ##############################################################
 
-    #! Problème : callback ne sera jamais awaited
+    def callback(ch, method, properties, body):
+        print("[x] %r" % body)
+        ## Appel fonction async ici
+        send_telemetry_from_device(device_client, body.decode('utf-8'))
+        
+    ## Appel de la fonction callback synchrone
     channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
 
-    channel.start_consuming()
 
+    ##############################################################
+    #### Fin problème
+    ##############################################################
+    
+    channel.start_consuming()   
     ### MQTT Broker stage end ###
 
     await device_client.shutdown()
