@@ -2,7 +2,7 @@
 
 import socket
 import struct
-import os, os.path
+import os.path
 # import time
 
 if os.path.exists("/tmp/python_unix_sockets_example"):
