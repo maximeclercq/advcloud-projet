@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  my_receive_broker:
+    container_name: broker_receiver
+    image: my_receive_broker
+    environment:
+      - IOTHUB_DEVICE_SECURITY_TYPE=${IOTHUB_DEVICE_SECURITY_TYPE}
+      - IOTHUB_CONNECTION_STRING=${IOTHUB_CONNECTION_STRING}
+    volumes:
+      - /tmp/python_unix_sockets_example:/tmp/python_unix_sockets_example
+    depends_on:
+      - my_sender_azure
+
+  my_sender_azure:
+    container_name: sender_azure
+    image: my_sender_azure
+    volumes:
+      - /tmp/python_unix_sockets_example:/tmp/python_unix_sockets_example
+  
+  
