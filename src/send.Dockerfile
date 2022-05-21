@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 RUN apt update
 RUN apt install -y python3 python3-pip python3-dev build-essential gcc
