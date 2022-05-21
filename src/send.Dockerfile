@@ -12,6 +12,7 @@ COPY . /app
 # RUN pip3 install -r requirements.txt
 RUN pip3 install pika
 RUN pip3 install azure-iot-hub
+RUN pip3 install azure-iot-device
 
 CMD ["python3", "hub_sender.py"]
 
