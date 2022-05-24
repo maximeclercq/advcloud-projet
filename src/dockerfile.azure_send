@@ -7,10 +7,9 @@ RUN pip3 install --upgrade pip
 
 RUN mkdir /app
 WORKDIR /app
-COPY . /app
+COPY ./azure_sender.py /app
 
 # RUN pip3 install -r requirements.txt
-RUN pip3 install pika
 RUN pip3 install azure-iot-hub
 RUN pip3 install azure-iot-device
 
