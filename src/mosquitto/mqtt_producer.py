@@ -25,8 +25,8 @@ class MqttProducer():
                 self.mqtt.loop_start()
                 self.mqtt.publish(self.mqtt_topic, self.message)
                 print(" [x] Sent %r" % self.message)
-                time.sleep(5)
                 self.mqtt.loop_stop()
+                time.sleep(5)
         except KeyboardInterrupt:
             print("interrupted")
             self.mqtt.disconnect()
@@ -35,6 +35,7 @@ class MqttProducer():
     @staticmethod
     def mqtt_on_connect(client, userdata, flags, rc):
         logging.info(f'Connected with result code {rc}')
+        print("connected OK")
 
 def get_argument_parser():
     parser = argparse.ArgumentParser(add_help=False, formatter_class=argparse.ArgumentDefaultsHelpFormatter)

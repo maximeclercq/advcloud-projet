@@ -33,7 +33,7 @@ class MqttConsumer():
         try:
             message = msg.payload.decode()
             logging.debug(f'Topic {msg.topic}: {message}')
-            print("[x] %r" % msg)
+            print("[x] %r" % message)
             # send_to_socket(message)
         except Exception as e:
             logging.exception('Failed to process MQTT message: ' + str(e))
