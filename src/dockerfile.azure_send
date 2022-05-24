@@ -13,5 +13,5 @@ COPY ./azure_sender.py /app
 RUN pip3 install azure-iot-hub
 RUN pip3 install azure-iot-device
 
-CMD ["python3", "hub_sender.py"]
+CMD ["python3", "azure_sender.py"]
 

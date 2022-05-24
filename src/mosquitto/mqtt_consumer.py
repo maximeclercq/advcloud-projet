@@ -28,29 +28,29 @@ class MqttConsumer():
     def mqtt_on_connect(client, userdata, flags, rc):
         logging.info(f'Connected with result code {rc}')
 
+    def send_to_socket(self, message):
+        print("Connecting...")
+        if os.path.exists("/tmp/docker_socket.s"):
+            client = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+            client.connect("/tmp/docker_socket.s")
+            print("Ready.")
+            print("Ctrl-C to quit.")
+            print("SEND:", message)
+            client.send(str.encode(message))
+            client.close()
+        else:
+            print("Couldn't Connect!")
+            print("Done")
+    
     def mqtt_on_message(self, client, userdata, msg):
         logging.debug(f'Message on topic {msg.topic}. {len(msg.payload)} bytes')
         try:
             message = msg.payload.decode()
             logging.debug(f'Topic {msg.topic}: {message}')
             print("[x] %r" % message)
-            # send_to_socket(message)
+            self.send_to_socket(message)
         except Exception as e:
             logging.exception('Failed to process MQTT message: ' + str(e))
-
-    def send_to_socket(self, message):
-        print("Connecting...")
-        if os.path.exists("/tmp/python_unix_sockets_example"):
-            client = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
-            client.connect("/tmp/python_unix_sockets_example")
-            print("Ready.")
-            print("Ctrl-C to quit.")
-            print("SEND:", message)
-            client.send(message)
-            client.close()
-        else:
-            print("Couldn't Connect!")
-            print("Done")
 
 def get_argument_parser():
     parser = argparse.ArgumentParser(add_help=False, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
