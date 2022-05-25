@@ -22,7 +22,7 @@ logging.basicConfig(level=logging.ERROR)
 # This id can change according to the company the user is from
 # and the name user wants to call this Plug and Play device
 
-model_id = "ImageDetector" #TODO : Replace it by a name device parameter
+model_id = "device"
 
 #####################################################
 # TELEMETRY TASKS
@@ -47,11 +47,11 @@ def stdin_listener():
     """
     Listener for quitting the sample
     """
-    while True:
-        selection = input("Press Q to quit\n")
-        if selection == "Q" or selection == "q":
-            print("Quitting...")
-            break
+    # while True:
+    #     selection = input("Press Q to quit\n")
+    #     if selection == "Q" or selection == "q":
+    #         print("Quitting...")
+    #         break
 
 
 # END KEYBOARD INPUT LISTENER
@@ -128,12 +128,12 @@ async def main():
     async def send_telemetry(): 
         print("Waiting to send data to the hub")
 
-        if os.path.exists("/tmp/docker_socket.s"):
-            os.remove("/tmp/docker_socket.s")
+        if os.path.exists("/tmp/socket_tmp"):
+            os.remove("/tmp/socket_tmp")
 
         print("Opening socket...")
         server = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
-        server.bind("/tmp/docker_socket.s")
+        server.bind("/tmp/socket_tmp")
 
         print("Listening...")
         while True:
@@ -149,7 +149,7 @@ async def main():
         print("-" * 20)
         print("Shutting down...")
         server.close()
-        os.remove("/tmp/docker_socket.s")
+        os.remove("/tmp/socket_tmp")
         print("Done")
 
     send_telemetry_task = asyncio.create_task(send_telemetry())
@@ -157,7 +157,7 @@ async def main():
     # Run the stdin listener in the event loop
     loop = asyncio.get_running_loop()
     user_finished = loop.run_in_executor(None, stdin_listener)
-    # # Wait for user to indicate they are done listening for method calls
+    # Wait for user to indicate they are done listening for method calls
     await user_finished
 
     send_telemetry_task.cancel()

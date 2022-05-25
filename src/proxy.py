@@ -30,9 +30,9 @@ class MqttConsumer():
 
     def send_to_socket(self, message):
         print("Connecting...")
-        if os.path.exists("/tmp/docker_socket.s"):
+        if os.path.exists("/tmp/socket_tmp"): #/tmp/docker_socket.s
             client = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
-            client.connect("/tmp/docker_socket.s")
+            client.connect("/tmp/socket_tmp")
             print("Ready.")
             print("Ctrl-C to quit.")
             print("SEND:", message)

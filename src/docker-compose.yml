@@ -1,1 +1,36 @@
 version: "3.7"
+
+services:
+  my_azure_sender:
+    container_name: azure_sender
+    image: azure_sender_img
+    environment:
+      - IOTHUB_DEVICE_SECURITY_TYPE=connectionString
+      - IOTHUB_DEVICE_CONNECTION_STRING=HostName=nuvla-hub.azure-devices.net;DeviceId=device;SharedAccessKey=8hQzNTwBSyKr6vmJVVnVbAhaXHdepHj9pXdov276ZV4=
+    volumes:
+      - /tmp:/tmp
+
+  my_proxy:
+    container_name: proxy
+    image: proxy_img
+    environment:
+      - MQTT_HOST=data-gateway
+      - MQTT_TOPIC=topic
+    volumes:
+      - /tmp:/tmp
+    networks:
+      - nuvlabox_network
+
+  my_mqtt_producer:
+    container_name: mqtt_producer
+    image: mqtt_producer_img
+    environment:
+      - MQTT_HOST=data-gateway
+      - MQTT_TOPIC=topic
+    networks:
+      - nuvlabox_network
+
+networks:
+  nuvlabox_network:
+    name: nuvlabox-shared-network
+    external: true
