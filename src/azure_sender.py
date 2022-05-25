@@ -47,11 +47,11 @@ def stdin_listener():
     """
     Listener for quitting the sample
     """
-    # while True:
-    #     selection = input("Press Q to quit\n")
-    #     if selection == "Q" or selection == "q":
-    #         print("Quitting...")
-    #         break
+    while True:
+        selection = input("Press Q to quit\n")
+        if selection == "Q" or selection == "q":
+            print("Quitting...")
+            break
 
 
 # END KEYBOARD INPUT LISTENER
@@ -107,7 +107,7 @@ async def main():
             )
 
     elif switch == "connectionString":
-        conn_str = os.getenv("IOTHUB_DEVICE_CONNECTION_STRING") #TODO for nuvla intregation: Replace it by nuvla env variable
+        conn_str = os.getenv("IOTHUB_DEVICE_CONNECTION_STRING")
         print("Connecting using Connection String " + conn_str)
         device_client = IoTHubDeviceClient.create_from_connection_string(
             conn_str, product_info=model_id
@@ -123,8 +123,6 @@ async def main():
     ################################################
     # Send telemetry (current data)
 
-    # TODO : Replace this function by a listener function which retrieve and send data from the IoT device
-
     async def send_telemetry(): 
         print("Waiting to send data to the hub")
 
@@ -138,7 +136,6 @@ async def main():
         print("Listening...")
         while True:
             data = server.recv(1024)
-            # data  = struct.unpack("s", data)
             data = data.decode('utf-8')
             if not data:
                 break

@@ -4,6 +4,8 @@ services:
   my_azure_sender:
     container_name: azure_sender
     image: azure_sender_img
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
     environment:
       - IOTHUB_DEVICE_SECURITY_TYPE=connectionString
       - IOTHUB_DEVICE_CONNECTION_STRING=HostName=nuvla-hub.azure-devices.net;DeviceId=device;SharedAccessKey=8hQzNTwBSyKr6vmJVVnVbAhaXHdepHj9pXdov276ZV4=
